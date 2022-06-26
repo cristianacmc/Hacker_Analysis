@@ -7,7 +7,6 @@ If you throw a 6, you'll throw the die again and will walk up the resulting numb
 Of course, you can not go lower than step number 0. And also, you admit that you're a bit clumsy and have a chance of 0.1% of falling down the stairs when you make a move. Falling down means that you have to start again from step 0. With all of this in mind, you bet with your friend that you'll reach 60 steps high.
 
 In the Empire State Building bet, your next move depends on the number of eyes you throw with the dice.
-[35]
 
 ```
 # Import numpy and set seed
@@ -28,7 +27,7 @@ else :
 # Print out dice and step
 print("Dice: {} - Steps: {}".format(dice, step))
 ```
-6
+6<br>
 Dice: 6 - Steps: 3
 
 Now it's time to put this code inside a for loop so that we can simulate a random walk.
@@ -53,8 +52,8 @@ print(random_walk)
 
 The code calculates the location in the Empire State Building after 100 dice throws. However, there's an issue, we can't go below 0! A typical way to solve problems like this is by using max(). If you pass max() two arguments, the biggest one gets returned.
 
-# Use max() to make sure that step doesn't go below zero if dice <= 2
 ```
+# Use max() to make sure that step doesn't go below zero if dice <= 2
 step = 0
 random_walk = [0]
 
@@ -80,11 +79,15 @@ plt.plot(random_walk, color="dodgerblue", linewidth=3)
 plt.ylabel("random_walk")
 plt.show()
 ```
-Simulate multiple walks
+
+![](img/graph_1.PNG)
+
+### Simulate multiple walks
+
 To get an idea about how big your chances are of reaching 60 steps, you can repeatedly simulate the random walk and collect the results.
 ```
 all_walks = []
-# Simulate random walk 10 times
+# Simulate random walk 20 times
 for i in range(20) :
     random_walk = [0]
     for x in range(10) :
@@ -101,16 +104,17 @@ for i in range(20) :
         
     # Append random_walk to all_walks
     all_walks.append(random_walk)
-    print(all_walks)
+print(all_walks)
 ```
 [[0, 0, 0, 0, 0, 0, 1, 2, 3, 9, 8], [0, 0, 0, 1, 2, 3, 2, 3, 4, 3, 8], [0, 1, 0, 0, 0, 0, 1, 0, 0, 2, 3], [0, 3, 4, 6, 7, 8, 9, 8, 7, 8, 9], [0, 1, 2, 1, 2, 3, 4, 7, 8, 9, 8], [0, 1, 0, 1, 2, 3, 7, 6, 5, 6, 7], [0, 1, 0, 1, 0, 1, 3, 8, 7, 8, 9], [0, 1, 2, 3, 4, 3, 4, 5, 6, 8, 10], [0, 0, 1, 2, 5, 4, 5, 4, 5, 6, 7], [0, 0, 1, 0, 1, 2, 4, 3, 2, 3, 4], [0, 0, 2, 3, 4, 5, 6, 7, 8, 7, 8], [0, 1, 6, 7, 6, 5, 4, 3, 4, 5, 6], [0, 5, 6, 5, 6, 7, 8, 9, 10, 11, 10], [0, 0, 1, 0, 6, 5, 6, 5, 6, 5, 6], [0, 4, 8, 10, 12, 11, 12, 14, 13, 19, 20], [0, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7], [0, 2, 1, 0, 1, 7, 12, 11, 10, 14, 15], [0, 1, 2, 4, 3, 4, 3, 4, 3, 2, 8], [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 7], [0, 1, 0, 0, 1, 0, 1, 0, 1, 2, 6]]
 
-all_walks is a list of lists: every sub-list represents a single random walk. If you convert this list of lists to a NumPy array, you can make interesting plots.
+**all_walks** is a list of lists: every sub-list represents a single random walk. If you convert this list of lists to a NumPy array, you can make interesting plots.
 ```
 np_aw = np.array(all_walks)
 plt.plot(all_walks)
 plt.show()
 ```
+![](img/graph_2.PNG)
 ```
 # by calling np.transpose() every row represents the position after 1 throw for the 10 random walks
 np_aw_t = np.transpose(np_aw)
@@ -119,7 +123,8 @@ plt.ylabel("all_walks")
 plt.show()
 ```
 
-Implement clumsiness
+### Implement clumsiness
+
 To implement the clumsy condition we need to call for another random number generation. Basically, you can generate a random float between 0 and 1. If this value is less than or equal to 0.001, you should reset step to 0.
 ```
 all_walks = []
@@ -147,8 +152,12 @@ np_aw_t = np.transpose(np.array(all_walks))
 plt.plot(np_aw_t)
 plt.show()
 ```
-Plot the distribution
-To finally solve the question What are the odds that you'll reach 60 steps high on the Empire State Building? Basically, we want to know about the end points of all the random walks you've simulated. These end points have a certain distribution that you can visualize with a histogram.
+![](img/graph_3.PNG)
+
+### Plot the distribution
+
+To finally solve the question _What are the odds that you'll reach 60 steps high on the Empire State Building?_
+ Basically, we want to know about the end points of all the random walks you've simulated. These end points have a certain distribution that you can visualize with a histogram.
 
 ```
 # Simulate random walk 500 times
@@ -174,8 +183,27 @@ np_aw_t = np.transpose(np.array(all_walks))
 
 # Select last row from np_aw_t: ends
 ends = np.array(np_aw_t[-1, :])
-```
 
 # Plot histogram of ends, display plot
 plt.hist(ends, color='tomato')
 plt.show()
+```
+
+![](img/graph_5.PNG)
+
+### Calculate the odds
+
+The histogram was created from NumPy array that contains 500 integers.
+Each integer represents the end point of a random walk. To calculate the chance 
+that this end point is greater than or equal to 60, we can count the number of integers 
+in ends that are greater than or equal to 60 and divide that number by 500, the total 
+number of simulations. What's the estimated chance that you'll reach at least 60 steps 
+high if you play this Empire State Building game?
+
+```
+np.mean(ends >= 60) * 100
+```
+
+#### The answer is : 78.9%
+
+
