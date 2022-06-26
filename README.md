@@ -1,4 +1,4 @@
-Hacker Statistics
+# Hacker Statistics
 Scenario : You are walking up the empire state building and you're playing a game with a friend. You throw a die one hundred times.
 
 If it's 1 or 2 you'll go one step down
@@ -9,8 +9,8 @@ Of course, you can not go lower than step number 0. And also, you admit that you
 In the Empire State Building bet, your next move depends on the number of eyes you throw with the dice.
 [35]
 
-# Import numpy and set seed
 ```
+# Import numpy and set seed
 import numpy as np
 np.random.seed(123)
 step = 0
